@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Questão 01</title>
+</head>
+
+<body>
+    <h1>Lista de Compras</h1>
+    <form name="lista">
+        Quantidade:
+        <input type="number" name="quantidade" />
+        Item:
+        <input type="text" name="item" />
+        <div id="add">
+            <input type="submit" value="Adicionar" />
+        </div>
+    </form>
+    <ul></ul>
+    <div>
+        <button id="del">Limpar</button>
+    </div>
+
+    <script>
+        document.forms.lista.addEventListener("submit", envia);
+        var produtos = document.getElementsByTagName("ul")[0];
+
+        function envia(e) {
+            e.preventDefault();
+
+            var item = document.forms.lista.item.value;
+            var quant = Number(document.forms.lista.quantidade.value);
+
+            var novoLi = document.createElement("li");
+            novoLi.textContent = quant + " " + item;
+            produtos.appendChild(novoLi);
+
+            document.forms.lista.reset();
+            document.forms.lista.quantidade.focus();
+
+        }
+
+        var apaga = document.getElementById("del");
+        apaga.addEventListener("click", deleta);
+        function deleta() {
+            produtos.innerHTML = " ";
+        }
+
+    </script>
+</body>
+
+</html>

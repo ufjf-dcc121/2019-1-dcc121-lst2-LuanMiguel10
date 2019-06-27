@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Questão 02</title>
+</head>
+
+<body>
+    <h1>Pilha de Dados</h1>
+    <form name="pilha">
+        Entrada:<input type="number" id="entrada" />
+        <input type="submit" id="add" value="Empilhar">
+    </form>
+
+    <ol></ol>
+    <button id="del">Desempilhar</button>
+
+    <script>
+        var pilha = [];
+
+        var dados = document.forms.pilha;
+        var entrada = document.getElementById("entrada");
+        var empilhar = document.getElementById("add");
+        var desempilhar = document.getElementById("del");
+        var lista = document.getElementsByTagName("ol")[0];
+
+        dados.addEventListener("submit", vai);
+        function vai(e) {
+            e.preventDefault();
+            pilha.push(entrada.value);
+            preenche();
+        }
+
+        function preenche() {
+            lista.innerHTML = ""
+            for (var i = pilha.length - 1; i >= 0; i--) {
+                var novoLi = document.createElement("li");
+                novoLi.innerText = pilha[i];
+                lista.appendChild(novoLi);
+            }
+            dados.reset();
+            dados.entrada.focus();
+
+        }
+
+        desempilhar.addEventListener("click", volta);
+
+        function volta() {
+            pilha.splice(pilha.length - 1, 1);
+            preenche();
+        }
+    </script>
+</body>
+
+</html>
