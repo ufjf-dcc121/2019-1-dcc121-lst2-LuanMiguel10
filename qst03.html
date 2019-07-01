@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Questão 03</title>
+
+    <style>
+        h1 {
+            margin-left: 35%;
+            color: rebeccapurple;
+        }
+
+        #excursao {
+            display: block;
+            background-color: lightblue;
+            padding: 5px;
+        }
+
+        #formulario {
+            border: 10px double;
+            width: 60%
+        }
+    </style>
+</head>
+
+<body>
+    <div id="formulario">
+        <h1>Excursão</h1>
+        <form name="excursao" id="excursao">
+            <p>
+                <span>Nome:</span>
+                <input type="text" name="nome" required />
+            </p>
+            <p>
+                <span>Idade:</span>
+                <input type="number" name="idade" required />
+            </p>
+
+            <input type="submit" name="add" />
+            <button id="del">Excluir</button>
+            <button id="att">Atualizar</button>
+
+
+        </form>
+
+        <h4>Adultos: </h4>
+        <ul id="adultos"></ul>
+
+        <h4>Estudantes: </h4>
+        <ul id="estudantes"></ul>
+    </div>
+
+    <script>
+        var adultos = [];
+        var estudantes = [];
+
+        var nome = document.getElementsByName("nome");
+        var idade = document.getElementsByName("idade");
+
+        var exclui = document.getElementById("del");
+        var atualiza = document.getElementById("att");
+
+        exclui.style.visibility = "hidden";
+        atualiza.style.visibility = "hidden";
+
+        var lstAdultos = document.getElementById("adultos");
+        var lstEstudantes = document.getElementById("estudantes");
+        var aux;
+
+        document.forms.excursao.addEventListener("submit", function (e) {
+            e.preventDefault();
+            var manipulaNome = document.forms.excursao.nome.value;
+            var manipulaIdade = document.forms.excursao.idade.value;
+            var info = { "nome": manipulaNome, "idade": manipulaIdade }
+
+            var novoLi = document.createElement("li");
+            novoLi.innerHTML = "<span name='spanName'>" + info.nome + "</span>" + " - " + "<span name='spanIdade'>" + info.idade + "</span>";
+            if (manipulaNome == "" || manipulaIdade == "")
+                return;
+            if (manipulaIdade >= 18) {
+                adultos.push(info);
+                lstAdultos.appendChild(novoLi);
+                novoLi.addEventListener("click", altera);
+            }
+            else if (manipulaIdade >= 0) {
+                estudantes.push(info);
+                lstEstudantes.appendChild(novoLi);
+                novoLi.addEventListener("click", altera);
+            }
+            document.forms.excursao.reset();
+            document.forms.excursao.nome.focus();
+        });
+
+        function altera() {
+            exclui.style.visibility = "visible";
+            atualiza.style.visibility = "visible";
+            this.style.color = "brown";
+            this.contentEditable = true;
+            aux = this.parentElement;
+            exclui.addEventListener("click", deleta);
+            atualiza.addEventListener("click", atualiza);
+        }
+
+        function deleta() {
+            var lstAuxiliar = aux.getElementsByTagName("li");
+            for (var i = 0; i < lstAuxiliar.length; i++)
+                if (lstAuxiliar[i].style.color == "brown")
+                    aux.removeChild(lstAuxiliar[i]);
+            exclui.style.visibility = "hidden";
+            atualiza.style.visibility = "hidden";
+        }
+        function atualiza() {
+            var lstAuxiliar = aux.getElementsByTagName("li");
+            for (var i = 0; i < lstAuxiliar.length; i++)
+                if (lstAuxiliar[i].style.color == "brown")
+                    lstAuxiliar[i].style.color = "yellow";
+            exclui.style.visibility = "hidden";
+            atualiza.style.visibility = "hidden";
+        }
+
+    </script>
+</body>
+
+</html>
