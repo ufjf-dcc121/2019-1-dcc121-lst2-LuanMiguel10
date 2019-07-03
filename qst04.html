@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Questão 04</title>
+</head>
+
+<body>
+    <h1>Animais</h1>
+    <form name="formu">
+        <p>
+            Amimal:
+            <input type="text" name="animal" required>
+        </p>
+        <p>
+            Altura:
+            <input type="number" step="0.01" name="altura" min="0.01" required>
+        </p>
+        <p>
+            Peso:
+            <input type="number" step="0.01" name="peso" min="0.01" required>
+        </p>
+        <p>
+            Velocidade:
+            <input type="number" name="velocidade" min="1" required>
+        </p>
+        <p>
+            Idade Máxima:
+            <input type="number" name="idade" min="1" required>
+        </p>
+        <input type="submit" name="botao">
+    </form>
+
+    <table border=1>
+
+        <h2>Características</h2>
+
+        <thead>
+            <tr>
+                <th scope="col">Animal</th>
+                <th scope="col">Altura (metros)</th>
+                <th scope="col">Peso (kg)</th>
+                <th scope="col">Velocidade (km/h)</th>
+                <th scope="col">Idade máxima (anos)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+            <th>Médias</th>
+            <td id="altura">0</td>
+            <td id="peso">0</td>
+            <td id="velocidade">0</td>
+            <td id="idade">0</td>
+        </tfoot>
+    </table>
+
+    <ol type="i">
+        <li>Mais alto: <span id="alto"></span></li>
+        <li>Mais pesado: <span id="pesado"></span></li>
+        <li>Mais veloz: <span id="veloz"></span></li>
+        <li>Mais longevo: <span id="longevo"></span></li>
+    </ol>
+
+    <p><span id="acimaPeso">0</span> animal(is) está(ão) acima da média de peso.</p>
+
+    <script>
+        var altura = [];
+        var peso = [];
+        var velocidade = [];
+        var idade = [];
+        var maior = [];
+
+        var corpoTabela = document.querySelector("tbody");
+        var rodape = document.querySelector("tfoot");
+        var maisPesado = document.getElementById("acimaPeso");
+
+        var envia = document.forms.formu;
+        envia.addEventListener("submit", preenche);
+
+        function preenche(e) {
+            e.preventDefault();
+            var animal = document.forms.formu.animal.value;
+            var altura = document.forms.formu.altura.value;
+            var peso = document.forms.formu.peso.value;
+            var velocidade = document.forms.formu.velocidade.value;
+            var idade = document.forms.formu.idade.value;
+
+            var tdAnimal = document.createElement("td");
+            var tdAltura = document.createElement("td");
+            var tdPeso = document.createElement("td");
+            var tdVelocidade = document.createElement("td");
+            var tdIdade = document.createElement("td");
+
+            tdAnimal.innerHTML = animal;
+            tdAltura.innerHTML = altura;
+            tdPeso.innerHTML = peso;
+            tdVelocidade.innerHTML = velocidade;
+            tdIdade.innerHTML = idade;
+
+            var novoTr = document.createElement("tr");
+            novoTr.appendChild(tdAnimal);
+            novoTr.appendChild(tdAltura);
+            novoTr.appendChild(tdPeso);
+            novoTr.appendChild(tdVelocidade);
+            novoTr.appendChild(tdIdade);
+            corpoTabela.appendChild(novoTr);
+
+            var i = 0;
+            altura[i] = Number(altura);
+            peso[i] = Number(peso);
+            velocidade[i] = Number(velocidade);
+            idade[i] = Number(idade);
+
+            var alt = mudaRodape(altura, i);
+            var pes = mudaRodape(peso, i);
+            var veloc = mudaRodape(velocidade, i);
+            var anos = mudaRodape(idade, i);
+            i++;
+
+            var rodapeAlt = document.getElementById("altura");
+            var rodapePes = document.getElementById("peso");
+            var rodapeVeloc = document.getElementById("velocidade");
+            var rodapeAnos = document.getElementById("idade");
+            rodapeAlt.innerHTML = parseFloat(alt.toFixed(2));
+            rodapePes.innerHTML = parseFloat(pes.toFixed(2));
+            rodapeVeloc.innerHTML = parseFloat(veloc.toFixed(2));
+            rodapeAnos.innerHTML = parseFloat(anos.toFixed(2));
+
+            alteraLista(animal, altura, peso, velocidade, idade, i, maior);
+            maisPesado.innerHTML = somaPesado(peso, pes, i);
+
+            envia.reset();
+            envia.animal.focus();
+        }
+
+        function mudaRodape(variavel, i) {
+            var soma = 0;
+            for (var k = 0; k <= i; k++) {
+                soma += variavel[k];
+            }
+            return soma.innerHTML = Number(soma / (i + 1));
+        }
+
+        function alteraLista(animal, altura, peso, velocidade, idade, i, maior) {
+            var maisAlto = document.getElementById("alto");
+            var maisPesado = document.getElementById("pesado");
+            var maisVeloz = document.getElementById("veloz");
+            var maisLongevo = document.getElementById("longevo");
+            if (i == 1) {
+                maisAlto.innerHTML = animal;
+                maisPesado.innerHTML = animal;
+                maisVeloz.innerHTML = animal;
+                maisLongevo.innerHTML = animal;
+                maior[0] = altura;
+                maior[1] = peso;
+                maior[2] = velocidade;
+                maior[3] = idade;
+            }
+            else {
+                if (altura > maior[0]) {
+                    maisAlto.innerHTML = animal;
+                    maior[0] = altura;
+                }
+                if (peso > maior[1]) {
+                    maisPesado.innerHTML = animal;
+                    maior[1] = peso;
+                }
+                if (velocidade > maior[2]) {
+                    maisVeloz.innerHTML = animal;
+                    maior[2] = velocidade;
+                }
+                if (idade > maior[3]) {
+                    maisLongevo.innerHTML = animal;
+                    maior[3] = idade;
+                }
+            }
+        }
+
+        function somaPesado(peso, media, i) {
+            var acima = 0;
+            for (var k = 1; k < i; k++) {
+                if (peso > media)
+                    acima++;
+            }
+            return acima;
+        }
+
+    </script>
+</body>
+
+</html>
